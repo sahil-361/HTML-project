@@ -1,0 +1,28 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo Installing NGINX
+      - sudo yum update -y
+      - sudo yum install -y nginx # Installing NGINX
+      - sudo nginx # Start NGINX in the background
+      - sudo nginx -t # Test the NGINX configuration for errors
+      - echo NGINX started successfully
+
+  build:
+    commands:
+      - echo Build started on `date`
+      - sudo mkdir -p /var/www/html # Create the directory if it doesn't exist
+      - cp *.html /var/www/html/ # Copy the HTML file to the NGINX directory
+      - echo .html files copied successfully
+
+  post_build:
+    commands:
+      - echo Configuring NGINX
+      - sudo nginx -s reload # Reload NGINX configuration after making changes
+
+artifacts:
+  files:
+    - '**/*' # Include all files
+  discard-paths: yes  # Discard directory structure, only include file names
